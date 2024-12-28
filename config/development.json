@@ -1,0 +1,9 @@
+{
+    "db": {
+      "username": "paulswarnalee01",
+      "password": "sp123",
+      "host": "cluster0.381rb.mongodb.net",
+      "options": "?retryWrites=true&w=majority&appName=Cluster0"
+    }
+  }
+  
