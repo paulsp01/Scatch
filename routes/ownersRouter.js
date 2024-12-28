@@ -5,17 +5,7 @@ const ownerModel=require('../models/ownerModel');
 router.get('/',(req,res)=>{
     res.send("hey this is owners page");
 });
-if(process.env.NODE_ENV==='development'){
-    router.get('/allOwners',async(req,res)=>{
-        try{
-            const owners=await ownerModel.find();
-            res.send(owners);
-        }
-        catch(err){
-            res.status(500).send(err);
-        }
-    });
-}
+
 if(process.env.NODE_ENV==='development'){
 router.post('/addOwner',async(req,res)=>{
     try{
