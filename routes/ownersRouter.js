@@ -2,9 +2,7 @@ const express=require('express');
 const router=express.Router();
 const ownerModel=require('../models/ownerModel');
 
-router.get('/',(req,res)=>{
-    res.send("hey this is owners page");
-});
+
 
 if(process.env.NODE_ENV==='development'){
 router.post('/addOwner',async(req,res)=>{
@@ -30,5 +28,9 @@ router.post('/addOwner',async(req,res)=>{
 });
 }
 
+router.get('/admin',(req,res)=>{
+    let success=req.flash('success');
+    res.render('createProducts',{success});
+});
 
 module.exports=router;
