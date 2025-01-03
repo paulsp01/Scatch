@@ -38,16 +38,8 @@ const paymentSchema = new mongoose.Schema({
     },
   ],
   paymentDetails: {
-    paymentMethod: { 
-        type: String, 
-        enum: ['Credit Card', 'Debit Card', 'UPI', 'PayPal'], 
-        required: true
-     },
-    transactionId: { 
-        type: String, 
-        unique: true, 
-        required: true
-     },
+    
+    
     amount: { 
         type: Number, 
         required: true 

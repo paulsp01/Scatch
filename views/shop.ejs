@@ -19,15 +19,11 @@
                 </form>
             </div>
             <div class="flex flex-col mt-20">
-                <a class="block w-fit mb-2" href="">New Collection</a>
-                <a class="block w-fit mb-2" href="">All Products</a>
-                <a class="block w-fit mb-2" href="">Discounted Products</a>
+                <a class="block w-fit mb-2" href="/shop?category=new">New Collection</a>
+                <a class="block w-fit mb-2" href="/shop?category=all">All Products</a>
+                <a class="block w-fit mb-2" href="/shop?category=discounted">Discounted Products</a>
             </div>
-            <div class="mt-32">
-                <a class="block w-fit mb-2" href="">Filter by :</a>
-                <a class="block w-fit mb-2" href="">Availability</a>
-                <a class="block w-fit mb-2" href="">Discount</a>
-            </div>
+            
         </div>
         <div class="w-[75%] flex flex-col gap-5 h-screen">
             <% for (let i = 0; i < products.length; i++) { %>

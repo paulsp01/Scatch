@@ -3,6 +3,12 @@ const router=express.Router();
 const {isLoggedin}=require('../middlwares/isLoggedin');
 const productModel=require('../models/productModel');
 const userModel=require("../models/userModel");
+const {cart}=require('../controllers/cartController');
+const shopController = require('../controllers/shopfilterController');
+
+
+router.get('/shopfilter', shopController.shopfilter);
+
 
 router.get('/',(req,res)=>{
     let error=req.flash("error");
@@ -36,6 +42,9 @@ router.get('/addToCart/:id',isLoggedin,async (req,res)=>{
 
    
 });
+
+
+router.get('/cart/delete/:id',isLoggedin,cart)
 
 router.get('/logout',isLoggedin,(req,res)=>{
     res.render('shop');

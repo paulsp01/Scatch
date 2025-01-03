@@ -14,7 +14,9 @@ const db=require('./config/mongoose');
 const ownersRouter=require('./routes/ownersRouter');
 const usersRouter=require('./routes/usersRouter');
 const productsRouter=require('./routes/productsRouter');
+const orderRouter=require('./routes/orderRouter');
 const indexRouter=require('./routes/index');
+const { order } = require('./controllers/orderController');
 
 
 app.use(express.json());
@@ -35,6 +37,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use('/owners',ownersRouter);
 app.use('/users',usersRouter);
 app.use('/products',productsRouter);
+app.use('/order',orderRouter)
 app.use('/',indexRouter);
 
 

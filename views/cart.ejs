@@ -1,9 +1,15 @@
 <%- include('./partials/header') %>
 
+<% user.cart.forEach(item => { 
+    item.netPrice = item.price - (item.price * item.discount / 100); 
+    item.total = item.netPrice * (item.counter || 1); 
+  }); %>
+
 <%user.cart.forEach((item,index)=>{%>
 <div class="w-full h-screen flex items-start px-20 py-20 gap-10">
     <div class="w-[30%] rounded-md overflow-hidden">
         <div class="w-full h-80 bg-[<%=item.bgcolor %>] flex items-center justify-center">
+            
             <img class="h-[20rem] " src="data:image/jpeg;base64,<%=item.image.toString('base64')%>" alt="" >
         </div>
         <div class="w-full flex justify-between px-5 py-4 bg-[<%=item.panelcolor %>]">
@@ -21,8 +27,17 @@
             <h2 class="text-lg">₹ <%=item.price%></h2>
         </div>
     </div>
+
+    
     <div class="w-[70%]">
+      <div class="flex justify-between items-center pr-10 py-5">
         <h3 class="text-xl">Price Breakdown</h3>
+        <a href="/cart/delete/<%=item._id%>" class="text-red-500" ">
+            <i class="w-7 h-7 bg-red-500 text-white flex rounded-full items-center justify-center ri-delete-bin-line cursor-pointer delete" data-index="<%= index %>"></i>
+        </a>
+        
+      </div>
+        
         <div class="px-10 mt-5">
             <div class="flex mt-2">
                 <h4 class="w-1/3">Total MRP</h4>
@@ -36,23 +51,27 @@
                 <h4 class="w-1/3">Shipping Fee</h4>
                 <h4>FREE</h4>
             </div>
+
+            
+       
+        
         </div>
         <div class="w-full h-[1px] bg-black mt-10"></div>
         <div class="flex mt-5">
             <h3 class="w-1/3 text-xl">Total Amount</h3>
             <h3 class="font-semibold text-xl text-black-600 " id="countA-<%= index %>" data-index="<%=index%>">
-                <% const bill = Number(item.price - item.price * item.discount / 100) %>
-                <%const a=Number(bill * (item.counter || 1))%>
-                ₹ <%= bill %> * 
+               
+                
+                ₹ <%= item.netPrice %> * 
                 <span id="countValue-<%= index %>" ><%= (item.counter || 1).toString() %></span> =
                 <h3 class="font-semibold text-xl text-green-600 ">
-                    <span id="totalAmount-<%= index %>" data-price="<%= item.price %>" data-discount="<%= item.discount %>"> ₹ <%=a  %>.00</span>
+                    <span id="totalAmount-<%= index %>" data-price="<%= item.price %>" data-discount="<%= item.discount %>"> ₹ <%=item.total  %>.00</span>
                 </h3>
                 
             </h3>
             
         </div>
-        <form action=""></form>
+        
     </div>
 </div>
 <% })%>
@@ -62,14 +81,37 @@
         <h4 class="text-lg">Platform Fee</h4>
         <h4 class="text-lg">₹ 20</h4>
     </div>
-    <div class="w-full flex justify-between px-20 py-5">
-        <h2 class="font-bold italic text-xl">You need to pay</h2>
-        
-        <% const totalAmount = user.cart.reduce((acc, item) => acc + Number((item.price - item.price * item.discount / 100) * (item.counter || 1)), 0) %>
-        <button id="totalPayable" class="font-bold text-xl bg-blue-900 text-white p-3 rounded-md">
+    <form action="/order/order-placed" method="POST">
+        <div class="w-full flex justify-between px-20 py-5">
+          <h2 class="font-bold italic text-xl">You need to pay</h2>
+      
+          <% const totalAmount = user.cart.reduce((acc, item) => acc + Number((item.price - item.price * item.discount / 100) * (item.counter || 1)), 0) %>
+          <input type="hidden" name="totalAmount" value="<%= totalAmount + 20 %>" id="tA"  class="font-bold text-xl bg-blue-900 text-white p-3 rounded-md" >
+          <button id="totalPayable" class="font-bold text-xl bg-blue-900 text-white p-3 rounded-md" >
             ₹ <%= totalAmount + 20 %>.00
-        </button>
-    </div>
+          </button>
+        </div>
+      
+        <% user.cart.forEach((item, index) => { %>
+            <input type="hidden" name="products[<%= index %>][product]" value="<%= item._id %>">
+            <input type="hidden" name="products[<%= index %>][quantity]" id="quantity-<%= index %>" value="<%= item.counter || 1 %>">
+            <input type="hidden" name="products[<%= index %>][price]" id="price-<%= index %>" value="<%= ((item.price - (item.price * item.discount / 100)) * (item.counter || 1)).toFixed(2) %>">
+            <input type="hidden" name="products[<%= index %>][discount]" id="discount-<%= index %>" value="<%= item.discount %>">
+           
+            <% }); %>
+      
+        <div id="addressModal" class="modal hidden fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
+          <div class="modal-content bg-white p-6 rounded-md">
+            <h2 class="text-2xl mb-4">Enter Your Shipping Address</h2>
+            <label for="shippingAddress" class="block mb-2">Shipping Address</label>
+            <input type="text" id="shippingAddress" name="shippingAddress" class="w-full p-2 border rounded-md mb-4" required>
+      
+            <button type="submit" class="bg-green-600 text-white p-2 rounded-md" id="placeOrderBtn">Place Order</button>
+            <button type="button" id="closeModal" class="bg-red-600 text-white p-2 rounded-md ml-2">Cancel</button>
+          </div>
+        </div>
+      </form>
+      
     
 </div>
 
